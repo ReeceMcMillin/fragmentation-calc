@@ -1,3 +1,5 @@
+// Early attempt, works but was meant as framework
+
 class Packet {
     constructor(header, total, offset) {
         this.header = header;

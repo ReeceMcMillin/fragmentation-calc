@@ -2,16 +2,27 @@
 	import Packet from "./Packet.svelte";
 	import Network from "./Network.svelte";
 
+	function handleKeyDown(event) {
+		if (event.keyCode == 13) {
+			network.push(packet);
+			network.fragment(packet);
+		} else if (event.keyCode == 27) {
+			network.reset();
+		}
+	}
+
 	export let packet;
 	export let network;
 </script>
 
+<svelte:window on:keydown={handleKeyDown}></svelte:window>
+
 <main>
 	<div class="container">
-		<h1>Packet Fragmentation Calculator</h1>
+		<h1>IP Fragmentation Calculator</h1>
 		<Packet bind:packet />
 
-		<div class="btn-group" role="group">
+		<div class="btn-group btn-group-lg" role="group">
 			<button
 				class="btn btn-outline-primary"
 				on:click={() => {
@@ -32,6 +43,7 @@
 		<Network bind:network />
 	</div>
 </main>
+
 <footer class="footer navbar-default" role="contentinfo">
 	<div class="text-center p-4">
 		Created for y'all by
@@ -55,7 +67,7 @@
 	}
 
 	.btn-group {
-		margin: 2em auto;
+		margin: 3em auto;
 	}
 
 	main {

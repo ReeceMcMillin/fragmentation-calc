@@ -8,7 +8,7 @@
         }
     }
 
-    export let packet = new Packet(5, 800, 0);
+    export let packet = new Packet(5, 1200, 0);
 </script>
 
 <div class="form-inline container">
@@ -25,7 +25,7 @@
                 />
             </div>
             <div class="col">
-                <label for="total">Total</label>
+                <label for="total">Total Length</label>
                 <input
                     type="number"
                     class="form-control"

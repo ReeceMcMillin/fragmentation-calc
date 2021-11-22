@@ -1,10 +1,9 @@
 <script>
-    import { empty } from "svelte/internal";
-import { packetStore } from "./packetStore";
+    import { packetStore } from "./packetStore";
 
     class Network {
-        constructor() {
-            this.mtu = 600;
+        constructor(mtu) {
+            this.mtu = mtu;
             this.packets = packetStore;
         }
 
@@ -29,33 +28,33 @@ import { packetStore } from "./packetStore";
                 let max_data_size = this.mtu - packet.header * 4;
                 let frag_data_size = max_data_size - (max_data_size % 8);
                 let frag_total_size = frag_data_size + packet.header * 4;
-                remaining_data -= frag_data_size;
 
                 this.push({
                     header: packet.header,
                     total: frag_total_size,
                     offset: total_offset / 8,
-                    data: frag_total_size - (packet.header * 4),
+                    data: frag_total_size - packet.header * 4,
                 });
 
+                remaining_data -= frag_data_size;
                 total_offset += frag_data_size;
             }
             this.push({
                 header: packet.header,
                 total: remaining_data,
                 offset: total_offset / 8,
-                data: remaining_data - (packet.header * 4),
+                data: remaining_data - packet.header * 4,
             });
         }
     }
 
-    export let network = new Network();
+    export let network = new Network(600);
 </script>
 
 <div class="network container">
     <form>
         <div class="row">
-            <div class="col-lg-4 col-lg-offset-4">
+            <div class="col-lg-12">
                 <label for="mtu">MTU</label>
                 <input
                     type="number"
@@ -67,7 +66,7 @@ import { packetStore } from "./packetStore";
             </div>
         </div>
     </form>
-<p></p>
+    <p />
     <table class="table table-striped">
         <thead>
             <tr>
@@ -81,7 +80,7 @@ import { packetStore } from "./packetStore";
         <tbody>
             {#each $packetStore as p, i}
                 <tr>
-                    <td>{i+1}</td>
+                    <td>{i + 1}</td>
                     <td>{p.header}</td>
                     <td>{p.total}</td>
                     <td>{p.data}</td>
